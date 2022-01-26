@@ -73,10 +73,10 @@ func run(cmd *cobra.Command, args []string) {
 		errFatalf("no input data identified")
 	}
 
-	fmt.Println("NUM OF SOURCE OBJECTS: ", unstrucs)
+	fmt.Println("NUM OF SOURCE OBJECTS: ", len(unstrucs))
 
 	responses, err := test.Test(unstrucs)
-	fmt.Println("RESPONSES: %v", responses)
+	fmt.Printf("RESPONSES: %v\n", responses)
 	if err != nil {
 		errFatalf("auditing objects: %v\n", err)
 	}

@@ -413,6 +413,8 @@ func (d *Driver) Query(ctx context.Context, path string, input interface{}, opts
 		return nil, err
 	}
 
+	fmt.Printf("RESULT SET: %v\n", rs)
+
 	var results []*types.Result
 	for _, r := range rs {
 		result := &types.Result{}

@@ -741,6 +741,7 @@ TargetLoop:
 	for name, target := range c.targets {
 		// Short-circuiting question applies here as well
 		resp, err := c.backend.driver.Query(ctx, fmt.Sprintf(`hooks["%s"].audit`, name), nil, drivers.Tracing(cfg.enableTracing))
+		fmt.Printf("RESP: %v\n", resp)
 		if err != nil {
 			errMap[name] = err
 			continue

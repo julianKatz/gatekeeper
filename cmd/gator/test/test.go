@@ -76,6 +76,7 @@ func run(cmd *cobra.Command, args []string) {
 	fmt.Println("NUM OF SOURCE OBJECTS: ", unstrucs)
 
 	responses, err := test.Test(unstrucs)
+	fmt.Println("RESPONSES: %v", responses)
 	if err != nil {
 		errFatalf("auditing objects: %v\n", err)
 	}

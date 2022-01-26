@@ -73,11 +73,15 @@ func run(cmd *cobra.Command, args []string) {
 		errFatalf("no input data identified")
 	}
 
+	fmt.Println("NUM OF SOURCE OBJECTS: ", unstrucs)
+
 	responses, err := test.Test(unstrucs)
 	if err != nil {
 		errFatalf("auditing objects: %v\n", err)
 	}
 	results := responses.Results()
+
+	fmt.Println("NUM OF RESULTS: ", len(results))
 
 	// TODO (https://github.com/open-policy-agent/gatekeeper/issues/1787): Add
 	// `-ojson` and `-oyaml` flags

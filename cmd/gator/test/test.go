@@ -160,11 +160,14 @@ func readSources(filenames []string) ([]*unstructured.Unstructured, error) {
 func readFiles(filenames []string) ([]*unstructured.Unstructured, error) {
 	var unstrucs []*unstructured.Unstructured
 
+	fmt.Printf("FILENAMES IN: %v\n", filenames)
+
 	// normalize directories by listing their files
 	normalized, err := normalize(filenames)
 	if err != nil {
 		return nil, fmt.Errorf("normalizing: %w", err)
 	}
+	fmt.Printf("NORMALIZED: %v\n", normalized)
 
 	for _, filename := range normalized {
 		file, err := os.Open(filename)

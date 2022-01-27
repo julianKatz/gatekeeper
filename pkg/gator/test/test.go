@@ -35,6 +35,8 @@ func Test(objs []*unstructured.Unstructured) (*types.Responses, error) {
 			continue
 		}
 
+		fmt.Println("TEMPLATE FOUND: ", obj.GetName())
+
 		templ, err := gator.ToTemplate(scheme, obj)
 		if err != nil {
 			return nil, fmt.Errorf("converting unstructured %q to template: %w", obj.GetName(), err)
@@ -53,6 +55,8 @@ func Test(objs []*unstructured.Unstructured) (*types.Responses, error) {
 			continue
 		}
 
+		fmt.Println("CONSTRAINT FOUND: ", obj.GetName())
+
 		_, err := client.AddConstraint(context.Background(), obj)
 		if err != nil {
 			return nil, fmt.Errorf("adding constraint %q: %w", obj.GetName(), err)
@@ -61,6 +65,7 @@ func Test(objs []*unstructured.Unstructured) (*types.Responses, error) {
 
 	// finally, add all the data.
 	for _, obj := range objs {
+		fmt.Println("DATA ADDED: ", obj.GetName())
 		_, err := client.AddData(context.Background(), obj)
 		if err != nil {
 			return nil, fmt.Errorf("adding data of GVK %q: %w", obj.GroupVersionKind().String(), err)

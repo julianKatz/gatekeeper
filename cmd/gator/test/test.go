@@ -121,7 +121,7 @@ func run(cmd *cobra.Command, args []string) {
 	os.Exit(exitCode)
 }
 
-func enforceableFailure(results []*types.Result) bool {
+func enforceableFailure(results []*test.GatorResult) bool {
 	for _, result := range results {
 		if result.EnforcementAction == string(util.Deny) {
 			return true

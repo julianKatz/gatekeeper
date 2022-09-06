@@ -58,10 +58,11 @@ func init() {
 
 func TestTest(t *testing.T) {
 	tcs := []struct {
-		name   string
-		inputs []string
-		want   []*types.Result
-		err    error
+		name                   string
+		inputs                 []string
+		want                   []*types.Result
+		err                    error
+		referentialDataEnabled bool
 	}{
 		{
 			name: "basic no violation",
@@ -70,6 +71,7 @@ func TestTest(t *testing.T) {
 				fixtures.ConstraintAlwaysValidate,
 				fixtures.Object,
 			},
+			referentialDataEnabled: true,
 		},
 		{
 			name: "basic violation",
@@ -95,9 +97,10 @@ func TestTest(t *testing.T) {
 					Constraint: constraintNeverValidate,
 				},
 			},
+			referentialDataEnabled: true,
 		},
 		{
-			name: "referential constraint with violation",
+			name: "referential constraint with violation, referential data enabled",
 			inputs: []string{
 				fixtures.TemplateReferential,
 				fixtures.ConstraintReferential,
@@ -116,6 +119,18 @@ func TestTest(t *testing.T) {
 					Constraint: constraintReferential,
 				},
 			},
+			referentialDataEnabled: true,
+		},
+		{
+			name: "referential constraint with violation, referential data disabled",
+			inputs: []string{
+				fixtures.TemplateReferential,
+				fixtures.ConstraintReferential,
+				fixtures.ObjectReferentialInventory,
+				fixtures.ObjectReferentialDeny,
+			},
+			want:                   nil,
+			referentialDataEnabled: false,
 		},
 		{
 			name: "referential constraint without violation",
@@ -125,10 +140,12 @@ func TestTest(t *testing.T) {
 				fixtures.ObjectReferentialInventory,
 				fixtures.ObjectReferentialAllow,
 			},
+			referentialDataEnabled: true,
 		},
 		{
-			name:   "no data of any kind",
-			inputs: []string{},
+			name:                   "no data of any kind",
+			inputs:                 []string{},
+			referentialDataEnabled: true,
 		},
 		{
 			name: "objects with no policy",
@@ -136,19 +153,22 @@ func TestTest(t *testing.T) {
 				fixtures.ObjectReferentialInventory,
 				fixtures.ObjectReferentialAllow,
 			},
+			referentialDataEnabled: true,
 		},
 		{
 			name: "template with no objects or constraints",
 			inputs: []string{
 				fixtures.TemplateReferential,
 			},
+			referentialDataEnabled: true,
 		},
 		{
 			name: "constraint with no template causes error",
 			inputs: []string{
 				fixtures.ConstraintReferential,
 			},
-			err: constraintclient.ErrMissingConstraintTemplate,
+			err:                    constraintclient.ErrMissingConstraintTemplate,
+			referentialDataEnabled: true,
 		},
 	}
 
@@ -164,7 +184,7 @@ func TestTest(t *testing.T) {
 				objs = append(objs, u)
 			}
 
-			resps, err := Test(objs)
+			resps, err := Test(objs, tc.referentialDataEnabled)
 			if tc.err != nil {
 				// If we're checking for specific errors, use errors.Is() to verify
 				if err == nil {

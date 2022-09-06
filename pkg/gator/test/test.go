@@ -25,7 +25,7 @@ func init() {
 	}
 }
 
-func Test(objs []*unstructured.Unstructured) (*types.Responses, error) {
+func Test(objs []*unstructured.Unstructured, referentialData bool) (*types.Responses, error) {
 	// create the client
 
 	driver, err := local.New(local.Tracing(false))
@@ -70,10 +70,12 @@ func Test(objs []*unstructured.Unstructured) (*types.Responses, error) {
 	}
 
 	// finally, add all the data.
-	for _, obj := range objs {
-		_, err := client.AddData(ctx, obj)
-		if err != nil {
-			return nil, fmt.Errorf("adding data of GVK %q: %w", obj.GroupVersionKind().String(), err)
+	if referentialData {
+		for _, obj := range objs {
+			_, err := client.AddData(ctx, obj)
+			if err != nil {
+				return nil, fmt.Errorf("adding data of GVK %q: %w", obj.GroupVersionKind().String(), err)
+			}
 		}
 	}
 

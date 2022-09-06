@@ -74,7 +74,7 @@ func run(cmd *cobra.Command, args []string) {
 		errFatalf("no input data identified")
 	}
 
-	responses, err := test.Test(unstrucs)
+	responses, err := test.Test(unstrucs, true)
 	if err != nil {
 		errFatalf("auditing objects: %v\n", err)
 	}

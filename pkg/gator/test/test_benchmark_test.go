@@ -56,42 +56,49 @@ func init() {
 }
 
 func BenchmarkTestWithReferentialData(b *testing.B) {
-	tcs := map[string]struct {
+	tcs := []struct {
+		name                     string
 		clusterContents          []*unstructured.Unstructured
 		referentialDataSupported bool
 	}{
-		"Referential: 200 pods": {
+		{
+			name:                     "Referential: 200 pods",
 			clusterContents:          twoHundredPods,
 			referentialDataSupported: true,
 		},
-		"Non-referential: 200 pods": {
+		{
+			name:                     "Non-referential: 200 pods",
 			clusterContents:          twoHundredPods,
 			referentialDataSupported: true,
 		},
-		"Referential: 500 pods": {
+		{
+			name:                     "Referential: 500 pods",
 			clusterContents:          fiveHundredPods,
 			referentialDataSupported: true,
 		},
-		"Non-referential: 500 pods": {
+		{
+			name:                     "Non-referential: 500 pods",
 			clusterContents:          fiveHundredPods,
 			referentialDataSupported: true,
 		},
-		"Referential: 1000 pods": {
+		{
+			name:                     "Referential: 1000 pods",
 			clusterContents:          oneThousandPods,
 			referentialDataSupported: true,
 		},
-		"Non-referential: 1000 pods": {
+		{
+			name:                     "Non-referential: 1000 pods",
 			clusterContents:          oneThousandPods,
 			referentialDataSupported: true,
 		},
 	}
 
-	for name, tc := range tcs {
+	for _, tc := range tcs {
 		uns := []*unstructured.Unstructured{}
 		uns = append(uns, policy...)
 		uns = append(uns, tc.clusterContents...)
 
-		b.Run(name, func(b *testing.B) {
+		b.Run(tc.name, func(b *testing.B) {
 			for n := 0; n < b.N; n++ {
 				Test(uns, tc.referentialDataSupported)
 			}
